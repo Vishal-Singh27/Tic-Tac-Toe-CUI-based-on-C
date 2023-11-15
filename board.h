@@ -6,7 +6,7 @@
 
 typedef struct
 {
-    char boardarr[3][3];
+    char **boardarr;
     bool status;
 }
 Board;
@@ -14,7 +14,7 @@ Board;
 typedef struct 
 {
     int total_actions;
-    int rowcol[6][2];
+    int **rowcol;
 }
 actions;
 
@@ -59,15 +59,23 @@ void print_board(Board *board)
     }
 }
 
-void newboard(Board *board)
+Board *newboard(void)
 {
+    Board *board = malloc(sizeof(board));
+
+    board->boardarr = malloc(sizeof(char *) * 3);
+    
     for (int i = 0; i < 3; i++)
     {
+        board->boardarr[i] = malloc(sizeof(char) * 3);
+
         for (int f = 0; f < 3; f++)
         {
             board->boardarr[i][f] = ' ';
         }
     }
+
+    return board;
 }
 
 void changeboard(Board *board, int row, int col, char turn)
@@ -246,7 +254,7 @@ void print_winner(Board *board)
     char winnerplayer = winner(board);
     if (winnerplayer != 'N')
     {
-        printf("\nThe winner is: %c\n", winnerplayer);
+        printf("The winner is: %c\n", winnerplayer);
     }
 
     else
@@ -264,6 +272,7 @@ actions *all_actions(Board *board)
 
     action = malloc(sizeof(actions));
     action->total_actions = 0;
+    action->rowcol = malloc(sizeof(int *) * 9);
 
     for (int i = 0; i < 3; i++)
     {
@@ -271,6 +280,7 @@ actions *all_actions(Board *board)
         {
             if (board->boardarr[i][f] == ' ')
             {
+                action->rowcol[action->total_actions] = malloc(sizeof(int) * 2);
                 action->rowcol[action->total_actions][0] = i;
                 action->rowcol[action->total_actions][1] = f;
                 action->total_actions++;
@@ -308,18 +318,18 @@ int utility(Board *board)
 
 Board *result(Board *oldboard, int *action)
 {
-    Board *newboard = malloc(sizeof(Board));
+    Board *Newboard = newboard();
 
     for (int i = 0; i < 3; i++)
     {
         for (int f = 0; f < 3; f++)
         {
-            newboard->boardarr[i][f] = oldboard->boardarr[i][f];
+            Newboard->boardarr[i][f] = oldboard->boardarr[i][f];
         }
     }
-    newboard->boardarr[action[0]][action[1]] = turn(oldboard);
+    Newboard->boardarr[action[0]][action[1]] = turn(oldboard);
 
-    return newboard;
+    return Newboard;
 }
 
 #endif

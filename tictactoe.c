@@ -4,8 +4,7 @@
 
 int main(void)
 {
-    Board *board = malloc(sizeof(Board));
-    newboard(board);
+    Board *board = newboard();
 
     int gamemode = get_intfromstarttoend("Select a gamemode:\n1: Play with AI\n2: PVP\nAnswer: ",1, 2);
 
@@ -24,10 +23,13 @@ int main(void)
     {
         mainplayer = 3;
     }
+
+    printf("\nStarting board:\n");
+    print_board(board);
     
     while(true)
     {
-        printf("\n");
+        // printf("\n");
         char player = turn(board);
 
         int row, col;
@@ -36,7 +38,6 @@ int main(void)
             do 
             {
                 printf("Move of %c\n", turn(board));
-                print_board(board);
                 
                 printf("Enter row and column (rows and columns are zero indexed): \n");
                 row = get_int("Row: ");
@@ -66,12 +67,18 @@ int main(void)
             int *rowcol = minimax(board);
             row = rowcol[0];
             col = rowcol[1];
+            free(rowcol);
         }
 
         changeboard(board, row, col, player);
+
+        printf("Resultant board after %c's move:\n", player);
+        print_board(board);
         if (terminal(board))
         {
             print_winner(board);
+            free2dchararr(board->boardarr, 3);
+            free(board);
             printf("Thnx for playing!\n");
             return 0;
         }

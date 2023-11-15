@@ -200,7 +200,10 @@ char get_char(char *txt)
     }
 
     // Returning the character
-    return str[0];
+    char s = str[0];
+    free(str);
+
+    return s;
 }
 
 // This helps in printing an array
@@ -225,6 +228,26 @@ void internalerror(int i)
 {
     printf("Internal Error...\n");
     exit(i);
+}
+
+void free2dintarr(int **arr, int limit)
+{
+    for (int i = 0; i < limit; i++)
+    {
+        free(arr[i]);
+    }
+
+    free(arr);
+}
+
+void free2dchararr(char **arr, int limit)
+{
+    for (int i = 0; i < limit; i++)
+    {
+        free(arr[i]);
+    }
+
+    free(arr);
 }
 
 #endif

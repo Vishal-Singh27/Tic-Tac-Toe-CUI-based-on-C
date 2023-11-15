@@ -31,9 +31,11 @@ int *minimax(Board *board)
                 act[0] = action->rowcol[i][0];
                 act[1] = action->rowcol[i][1];
             }
-
+            free2dchararr(resultboard->boardarr, 3);
             free(resultboard);
         }
+        free2dintarr(action->rowcol, action->total_actions);
+        free(action);
     }
 
     else if (turn(board) == 'O')
@@ -55,8 +57,11 @@ int *minimax(Board *board)
                 act[1] = action->rowcol[i][1];
             }
 
+            free2dchararr(resultboard->boardarr, 3);
             free(resultboard);
         }
+        free2dintarr(action->rowcol, action->total_actions);
+        free(action);
     }
 
     return act;
@@ -84,9 +89,11 @@ int find_min(Board *board)
             ans = tmp;
         }
 
+        free2dchararr(resultboard->boardarr, 3);
         free(resultboard);
     }
 
+    free2dintarr(action->rowcol, action->total_actions);
     free(action);
 
     return ans;
@@ -114,8 +121,11 @@ int find_max(Board *board)
             ans = tmp;
         }
 
+        free2dchararr(resultboard->boardarr, 3);
         free(resultboard);
     }
+    free2dintarr(action->rowcol, action->total_actions);
+    free(action);
 
     return ans;
 }
